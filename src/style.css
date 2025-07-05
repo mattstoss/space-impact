@@ -1,0 +1,9 @@
+:root {
+  background: rgb(55, 53, 77);
+}
+
+#game-canvas {
+  display: block;
+  margin: 40px auto;
+  background: black;
+}
