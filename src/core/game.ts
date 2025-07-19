@@ -26,15 +26,11 @@ async function runSingleGame(
   const enemies: Enemy[] = [];
   const heartImage = await loadImage("src/assets/heart.png");
 
-  let lives = 3;
   let enemyToRemove: number | null = null;
-  let shouldExit = false;
 
+  let lives = 3;
   function handlePlayerHurt() {
     lives--;
-    if (lives <= 0) {
-      shouldExit = true;
-    }
   }
 
   return new Promise<void>((resolve) => {
@@ -55,7 +51,7 @@ async function runSingleGame(
         enemy.update(ctx);
       }
 
-      if (shouldExit) {
+      if (lives <= 0) {
         resolve();
         return;
       }
