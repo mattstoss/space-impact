@@ -1,4 +1,4 @@
-import { runGame } from "./core/game";
+import { runGameSequence } from "./core/game";
 import "./style.css";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
@@ -19,5 +19,5 @@ async function main() {
     return;
   }
 
-  runGame(ctx);
+  runGameSequence(ctx);
 }

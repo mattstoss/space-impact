@@ -1,4 +1,5 @@
 import type { InputHandler } from "./input";
+import type { Options } from "./options";
 
 type MenuOptions = {
   title: string;
@@ -10,7 +11,7 @@ function runMenuBase(
   ctx: CanvasRenderingContext2D,
   input: InputHandler,
   options: MenuOptions
-): Promise<boolean> {
+): Promise<Options> {
   return new Promise((resolve) => {
     let debug = options.debug;
 
@@ -55,7 +56,7 @@ function runMenuBase(
       drawMenu();
       if (input.isSpacePressed()) {
         window.removeEventListener("keydown", handleKeyDown);
-        resolve(debug);
+        resolve({ isDebug: debug, shouldExit: false });
         return;
       }
       requestAnimationFrame(loop);
@@ -68,7 +69,7 @@ function runMenuBase(
 export function runMenuSequence(
   ctx: CanvasRenderingContext2D,
   input: InputHandler
-): Promise<boolean> {
+): Promise<Options> {
   return runMenuBase(ctx, input, {
     title: "Welcome to Space Impact!",
     subtitle: "Press Space to Start",
@@ -80,7 +81,7 @@ export function runGameOverSequence(
   ctx: CanvasRenderingContext2D,
   input: InputHandler,
   isDebug: boolean
-): Promise<boolean> {
+): Promise<Options> {
   return runMenuBase(ctx, input, {
     title: "Game Over!",
     subtitle: "Press Space to Play Again",
