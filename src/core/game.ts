@@ -26,11 +26,20 @@ async function runSingleGame(
   const enemies: Enemy[] = [];
   const heartImage = await loadImage("src/assets/heart.png");
 
-  let enemyToRemove: number | null = null;
-
   let lives = 3;
   function handlePlayerHurt() {
     lives--;
+  }
+
+  function removeEnemyAndBullets(enemyId: number) {
+    const index = enemies.findIndex((e) => e.id === enemyId);
+    if (index !== -1) {
+      const enemy = enemies[index];
+      for (const bullet of enemy.bullets) {
+        enemy.removeBullet(bullet.id);
+      }
+      enemies.splice(index, 1);
+    }
   }
 
   return new Promise<void>((resolve) => {
@@ -59,7 +68,7 @@ async function runSingleGame(
       // Check if player hurt
       for (const enemy of enemies) {
         if (isCollision(player, enemy)) {
-          enemyToRemove = enemy.id;
+          removeEnemyAndBullets(enemy.id);
           handlePlayerHurt();
         }
         for (const bullet of enemy.bullets) {
@@ -74,23 +83,9 @@ async function runSingleGame(
       for (const bullet of player.bullets) {
         for (const enemy of enemies) {
           if (isCollision(bullet, enemy)) {
-            enemyToRemove = enemy.id;
+            removeEnemyAndBullets(enemy.id);
           }
         }
-      }
-
-      // Remove enemies that collided with the player
-      if (enemyToRemove !== null) {
-        const index = enemies.findIndex((e) => e.id === enemyToRemove);
-        if (index !== -1) {
-          // Remove enemy's bullets
-          const enemy = enemies[index];
-          for (const bullet of enemy.bullets) {
-            enemy.removeBullet(bullet.id);
-          }
-          enemies.splice(index, 1);
-        }
-        enemyToRemove = null;
       }
 
       // Draw player
